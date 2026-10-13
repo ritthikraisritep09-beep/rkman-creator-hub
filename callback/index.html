@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign-in callback - RKMAN Creator Hub</title>
+<style>
+:root{color-scheme:light dark;--bg:#f4f6fa;--ink:#14213d;--mut:#5b6b86;--card:#fff;--acc:#ffc400}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1a33;--ink:#eef2fa;--mut:#9fb0cf;--card:#17274a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Noto Sans Thai","Segoe UI",Tahoma,sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 18px 60px}h1{font-size:26px;margin:0 0 6px}h2{font-size:18px;margin-top:28px}
+.card{background:var(--card);border-radius:12px;padding:16px 18px;margin:14px 0}.mut{color:var(--mut);font-size:14px}
+a{color:inherit}nav a{margin-right:14px}code,textarea{font-family:Consolas,monospace}
+textarea{width:100%;min-height:90px;padding:10px;border-radius:8px;border:1px solid var(--mut);background:var(--bg);color:var(--ink)}
+button{font:inherit;font-weight:700;background:var(--acc);color:#3a2b00;border:0;border-radius:8px;padding:9px 16px;cursor:pointer}
+</style></head><body><main>
+<nav><a href="/rkman-creator-hub/">Home</a><a href="/rkman-creator-hub/terms.html">Terms of Service</a><a href="/rkman-creator-hub/privacy.html">Privacy Policy</a></nav>
+
+<h1>Sign-in callback</h1>
+<div class="card" id="ok" hidden>
+<p>Authorization received. Copy the code below and paste it into <code>tiktok_sync.py</code> when it asks for it. Do not share this code with anyone.</p>
+<textarea id="code" readonly></textarea>
+<p><button id="copy">Copy code</button> <span class="mut" id="msg"></span></p>
+</div>
+<div class="card" id="err" hidden><p id="errtxt"></p></div>
+<p class="mut">This page runs entirely in your browser. The code is not sent anywhere.</p>
+<script>
+(function(){
+  var p=new URLSearchParams(location.search), code=p.get('code'), err=p.get('error');
+  if(code){
+    document.getElementById('ok').hidden=false;
+    document.getElementById('code').value=code;
+    document.getElementById('copy').onclick=function(){
+      var t=document.getElementById('code'); t.select();
+      (navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).then(function(){document.getElementById('msg').textContent='Copied';},function(){document.execCommand('copy');document.getElementById('msg').textContent='Copied';});
+    };
+  } else {
+    document.getElementById('err').hidden=false;
+    document.getElementById('errtxt').textContent = err ? ('TikTok returned an error: '+err+' '+(p.get('error_description')||'')) : 'No authorization code found. Start the sign-in again from the script.';
+  }
+})();
+</script>
+
+</main></body></html>
